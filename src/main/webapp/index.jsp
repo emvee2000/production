@@ -9,7 +9,7 @@
 </jsp:include>
 
 <main>
-    <h1>Production of </h1>
+    <h1>Production of ${item.name}</h1>
     <ul class="overall-list">
         <jsp:include page="BPO-list-item.jsp">
             <jsp:param name="item" value="tom"/>

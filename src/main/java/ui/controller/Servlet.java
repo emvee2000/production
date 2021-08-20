@@ -1,5 +1,7 @@
 package ui.controller;
 
+import domain.db.ItemsDB;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +21,7 @@ public class Servlet extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("item", ItemsDB.getInstance().getItemById(34));
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }

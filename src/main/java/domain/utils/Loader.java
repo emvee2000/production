@@ -5,16 +5,14 @@ import domain.db.ItemsDB;
 import domain.model.BPO;
 import domain.model.Item;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Loader {
 
-    static String BPOFile = "src/main/webapp/files/domain/blueprints.yaml";
-    static String ItemsFile = "src/main/webapp/files/domain/typeIDs.yaml";
+    static String BPOFile = "data/blueprints.yaml";
+    static String ItemsFile = "data/typeIDs.yaml";
 
     //load items
     /*
@@ -54,8 +52,7 @@ public class Loader {
         Yaml yaml = new Yaml();
         InputStream inputStream;
         try {
-            inputStream = new FileInputStream(ItemsFile);
-
+            inputStream = Loader.class.getClassLoader().getResourceAsStream(ItemsFile);
             HashMap yamlMap = (HashMap) yaml.load(inputStream);
             for (Object k :
                     yamlMap.keySet()) {
@@ -65,7 +62,7 @@ public class Loader {
                     items.add(i);
                 }
             }
-        } catch (FileNotFoundException e) {
+        } catch (Error e) {
             e.printStackTrace();
         }
         return items;
@@ -147,7 +144,7 @@ public class Loader {
         Yaml yaml = new Yaml();
         InputStream inputStream;
         try {
-            inputStream = new FileInputStream(BPOFile);
+            inputStream = Loader.class.getClassLoader().getResourceAsStream(BPOFile);
 
             HashMap yamlMap = (HashMap) yaml.load(inputStream);
             for (Object o :
@@ -158,7 +155,7 @@ public class Loader {
                     bpos.add(bpo);
                 }
             }
-        } catch (FileNotFoundException e) {
+        } catch (Error e) {
             e.printStackTrace();
         }
         return bpos;
