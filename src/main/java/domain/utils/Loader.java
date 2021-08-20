@@ -2,7 +2,7 @@ package domain.utils;
 
 import com.fasterxml.jackson.dataformat.yaml.snakeyaml.Yaml;
 import domain.db.ItemsDB;
-import domain.model.BPO;
+import domain.model.Bpo;
 import domain.model.Item;
 
 import java.io.InputStream;
@@ -57,7 +57,7 @@ public class Loader {
             for (Object k :
                     yamlMap.keySet()) {
                 HashMap item = (HashMap) yamlMap.get(k);
-                Item i = generateItemFromYamlItem((int) k, item);
+                Item i = generateItemFromYamlItem(Integer.parseInt(k.toString()), item);
                 if (i != null) {
                     items.add(i);
                 }
@@ -69,14 +69,20 @@ public class Loader {
     }
 
     private static Item generateItemFromYamlItem(int id, HashMap item) {
-        if (item.containsKey("basePrice") && item.containsKey("iconID") && item.containsKey("name") && item.containsKey("volume")) {
-            double basePrice = Double.parseDouble(item.get("basePrice").toString());
-            int iconID = (int) item.get("iconID");
-            HashMap name = (HashMap) item.get("name");
-            double volume = (double) item.get("volume");
-            return new Item(id, basePrice, iconID, (String) name.get("en"), volume);
+        double basePrice = 0;
+        if (item.containsKey("basePrice")) {
+            basePrice = Double.parseDouble(item.get("basePrice").toString());
         }
-        return null;
+        int iconID = 0;
+        if (item.containsKey("iconID")) {
+            iconID = (int) item.get("iconID");
+        }
+        HashMap name = (HashMap) item.get("name");
+        double volume = 0;
+        if (item.containsKey("volume")) {
+            volume = (double) item.get("volume");
+        }
+        return new Item(id, basePrice, iconID, (String) name.get("en"), volume);
     }
 
 
@@ -138,9 +144,9 @@ public class Loader {
             }
         }
              */
-    public static ArrayList<BPO> getBPOs() {
-
-        ArrayList<BPO> bpos = new ArrayList<>();
+    public static ArrayList<Bpo> getBPOs() {
+        new ItemsDB();
+        ArrayList<Bpo> bpos = new ArrayList<>();
         Yaml yaml = new Yaml();
         InputStream inputStream;
         try {
@@ -150,7 +156,7 @@ public class Loader {
             for (Object o :
                     yamlMap.keySet()) {
                 HashMap data = (HashMap) yamlMap.get(o);
-                BPO bpo = generateBPOFromYamlItem((int) o, data);
+                Bpo bpo = generateBPOFromYamlItem((int) o, data);
                 if (bpo != null) {
                     bpos.add(bpo);
                 }
@@ -161,7 +167,7 @@ public class Loader {
         return bpos;
     }
 
-    private static BPO generateBPOFromYamlItem(int id, HashMap map) {
+    private static Bpo generateBPOFromYamlItem(int id, HashMap map) {
         if (map.containsKey("activities")) {
             HashMap activities = (HashMap) map.get("activities");
             if (activities.containsKey("manufacturing")) {
@@ -170,7 +176,7 @@ public class Loader {
                     ArrayList materials = (ArrayList) menu.get("materials");
                     ArrayList product = (ArrayList) menu.get("products");
                     int time = (int) menu.get("time");
-                    return new BPO(id, formatListOfItemsToHasmap(materials), formatListOfItemsToHasmap(product), time);
+                    return new Bpo(id, formatListOfItemsToHasmap(materials), formatListOfItemsToHasmap(product), time);
                 }
             }
         }
@@ -181,7 +187,8 @@ public class Loader {
         HashMap map = new HashMap();
         for (Object o : list) {
             HashMap itemAndQuantity = (HashMap) o;
-            map.put(ItemsDB.getInstance().getItemById((int) itemAndQuantity.get("typeID")), itemAndQuantity.get("quantity"));
+            int id = Integer.parseInt(itemAndQuantity.get("typeID").toString());
+            map.put(ItemsDB.getInstance().getItemById(id), itemAndQuantity.get("quantity"));
         }
         return map;
     }

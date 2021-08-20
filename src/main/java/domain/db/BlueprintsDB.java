@@ -1,6 +1,7 @@
 package domain.db;
 
-import domain.model.BPO;
+import domain.model.Bpo;
+import domain.model.Item;
 import domain.utils.Loader;
 
 import java.util.ArrayList;
@@ -17,17 +18,52 @@ public class BlueprintsDB {
         return instance;
     }
 
-    ArrayList<BPO> BPOs = new ArrayList<>();
+    ArrayList<Bpo> BPOs = new ArrayList<>();
 
     public BlueprintsDB() {
         BPOs = Loader.getBPOs();
     }
 
+    public ArrayList<Bpo> getBPOs() {
+        return BPOs;
+    }
+
+    public Bpo getBPObyID(int id) {
+        for (Bpo bpo :
+                this.BPOs) {
+            if (bpo.getID() == id) {
+                return bpo;
+            }
+        }
+        return null;
+    }
+
     public HashMap getMaterialsForBPOID(int id) {
-        for (BPO bpo :
+        for (Bpo bpo :
                 this.BPOs) {
             if (bpo.getID() == id) {
                 return bpo.getMaterials();
+            }
+        }
+        return null;
+    }
+
+    public Item getProductOfBPOForBPO(int id) {
+        for (Bpo bpo :
+                this.BPOs) {
+            if (bpo.getID() == id) {
+                return bpo.getProduct();
+            }
+        }
+        return null;
+    }
+
+    public Bpo getBPOforItem(Item item) {
+        for (Bpo bpo :
+                this.BPOs) {
+            Item product = bpo.getProduct();
+            if (product == item) {
+                return bpo;
             }
         }
         return null;

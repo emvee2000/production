@@ -16,7 +16,7 @@ public class ItemsDB {
         return instance;
     }
 
-    ArrayList<Item> items = new ArrayList<>();
+    ArrayList<Item> items;
 
     public ItemsDB() {
         items = Loader.getItems();
@@ -40,6 +40,16 @@ public class ItemsDB {
         for (Item item :
                 this.items) {
             if (item.getId() == id) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public Item getItemByName(String name) {
+        for (Item item :
+                this.items) {
+            if (item.getName().equals(name)) {
                 return item;
             }
         }

@@ -8,10 +8,14 @@ public class Item {
     private double volume;
 
     public Item(int id, double basePrice, int iconID, String name, double volume) {
+        if (name == null) {
+            this.name = "fuck up";
+        } else {
+            this.name = name;
+        }
         this.id = id;
         this.basePrice = basePrice;
         this.iconID = iconID;
-        this.name = name;
         this.volume = volume;
     }
 
